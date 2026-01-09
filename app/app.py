@@ -26,8 +26,8 @@ with st.sidebar :
     {"label": "Photo", "id": "Photo", "default_checked":True}
 ]
     checkbox_dict = ui.checkbox(mode="multiple", options=checkbox_options_multiple, key="cb4")
-print( checkbox_dict )
-media_type =  [ k for k, v in checkbox_dict.items() if v == True ]
+    media_type =  [ k for k, v in checkbox_dict.items() if v ] if len( checkbox_dict.items() ) > 0 else list(  df['media_type'].value_counts().index )
+    
 df = df.query( 'media_type in @media_type' )
 
 KPIs_dict = {
