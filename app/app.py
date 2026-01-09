@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
+import streamlit_shadcn_ui as ui
 import plotly.express as px
 import plotly.graph_objects as go
 from PIL import Image
@@ -8,8 +9,26 @@ from utils import human_readable, instagram_palette, apply_figure_layout, months
 import os
 # streamlit run app/app.py
 
+import streamlit as st
+
 
 df = pd.read_csv( 'Data/Feature Engineered Data/Feature Engineered Data.csv' )
+
+
+media_types = df['media_type'].value_counts().index
+
+with st.sidebar :
+    st.subheader( 'Media Type' )
+    checkbox_options_multiple = [
+    {"label": "Carousel", "id": "Carousel", "default_checked":True},
+    {"label": "Video", "id": "Video", "default_checked":True},
+    {"label": "Reel", "id": "Reel", "default_checked":True},
+    {"label": "Photo", "id": "Photo", "default_checked":True}
+]
+    checkbox_dict = ui.checkbox(mode="multiple", options=checkbox_options_multiple, key="cb4")
+print( checkbox_dict )
+media_type =  [ k for k, v in checkbox_dict.items() if v == True ]
+df = df.query( 'media_type in @media_type' )
 
 KPIs_dict = {
     'Total Followers' : human_readable( int( df['followers_gained'].sum(  ) ) ),
